@@ -16,15 +16,14 @@ selected_type = st.sidebar.multiselect('Select Vehicle Type', options=df['type']
 selected_fuel = st.sidebar.multiselect('Select Fuel Type', options=df['fuel'].unique(), default=df['fuel'].unique())
 selected_transmission = st.sidebar.multiselect('Select Transmission Type', options=df['transmission'].unique(), default=df['transmission'].unique())
 
-# Filtering data based on sidebar selection
+# Filtering data
 filtered_data = df[
     (df['model_year'] == selected_year) & 
     (df['type'].isin(selected_type)) & 
     (df['fuel'].isin(selected_fuel)) & 
     (df['transmission'].isin(selected_transmission))
 ]
-
-# Layout with columns for histograms and scatter plots
+#histograms and scatter plots
 col1, col2 = st.columns(2)
 
 with col1:
@@ -35,14 +34,14 @@ with col2:
     fig_mileage = px.scatter(filtered_data, x='odometer', y='price', color='condition', title='Price vs. Mileage Analysis')
     st.plotly_chart(fig_mileage, use_container_width=True)
 
-# Display statistical summaries
+#statistical summaries
 st.sidebar.header("Statistical Summary:")
 st.sidebar.metric("Average Price", f"${filtered_data['price'].mean():,.2f}")
 st.sidebar.metric("Average Mileage", f"{filtered_data['odometer'].mean():,.0f} miles")
 st.sidebar.metric("Max Price", f"${filtered_data['price'].max():,.2f}")
 st.sidebar.metric("Min Price", f"${filtered_data['price'].min():,.2f}")
 
-# Interactive checkbox to toggle additional analysis
+#Interactive checkbox
 if st.checkbox('Show Detailed Statistical Analysis'):
     st.subheader('Detailed Statistics')
     st.write(filtered_data.describe())
